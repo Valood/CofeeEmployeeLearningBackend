@@ -85,5 +85,5 @@ async def get_test(db: AsyncSession = Depends(get_db)):
 
 @router.get("/test/check")
 async def check_test(db: AsyncSession = Depends(get_db)):
-    
+    pass
 
