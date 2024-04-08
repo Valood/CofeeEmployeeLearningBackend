@@ -6,7 +6,7 @@ from models.user import UserRole
 
 class UserRepository:
 
-    async def create_user(self, email: str, password: bytes, db: AsyncSession, role: str = UserRole.BARISTA) -> UserModel:
+    async def create_user(self, email: str, password: bytes, db: AsyncSession, role: str = UserRole.INTERN) -> UserModel:
         user = UserModel(email=email, password=password, role=role)
         db.add(user)
         await db.commit()

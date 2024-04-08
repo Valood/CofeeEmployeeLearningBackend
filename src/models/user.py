@@ -30,3 +30,12 @@ class User(Base):
     email = Column(String, unique=True)
     password = Column(BYTEA, nullable=True)
 
+
+class Lecture(Base):
+    __tablename__ = "lectures"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String)
+    content = Column(String)
+
+
