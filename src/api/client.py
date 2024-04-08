@@ -75,6 +75,7 @@ async def get_test(db: AsyncSession = Depends(get_db)):
                 "answer": variant.answer})
         questions.append({
             "id": question.id,
+            "question": question.question,
             "variants": variants
         })
     return {
