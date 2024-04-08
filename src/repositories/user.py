@@ -54,4 +54,4 @@ class UserRepository:
         return questions
 
     async def update_user_role(self, user_id: int, db: AsyncSession):
-
+        pass
