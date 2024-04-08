@@ -60,3 +60,25 @@ async def create_lecture(
         db: AsyncSession = Depends(get_db)):
     lecture = await repository.get_all_lectures(db)
     return lecture
+
+
+@router.get("/test")
+async def get_test(db: AsyncSession = Depends(get_db)):
+    test = await repository.get_test(db)
+    print(test.title)
+    await db.refresh(test)
+    questions = []
+    for question in test.questions:
+        variants = []
+        for variant in question.variant_answers:
+            variants.append({
+                "id": variant.id,
+                "answer": variant.answer})
+        questions.append({
+            "id": question.id,
+            "variants": variants
+        })
+    return {
+        "title": test.title,
+        "questions": questions
+    }

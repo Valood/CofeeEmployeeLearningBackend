@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 
@@ -42,3 +44,9 @@ class CreatedLecture(BaseModel):
 class CreateLecture(BaseModel):
     title: str
     content: str
+
+# class VariantAnswer(BaseModel):
+
+# class Question:
+#     question: str
+#     answer: List[]

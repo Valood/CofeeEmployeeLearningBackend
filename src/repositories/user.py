@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.user import User as UserModel
-from models.user import Lecture
+
+from models.user import *
 from models.user import UserRole
 
 
@@ -38,3 +39,18 @@ class UserRepository:
         exec = await db.execute(q)
         lectures = exec.scalars()
         return lectures
+
+    async def get_test(self, db: AsyncSession):
+        q = select(Test)
+        print(q)
+        exec = await db.execute(q)
+        test = exec.scalars().first()
+
+        await db.refresh(test)
+        await test.questions.load()
+        return test
+    async def get_questions(self, db: AsyncSession):
+        q = select(Question)
+        exec = await db.execute(q)
+        questions = exec.scalars()
+        return questions
