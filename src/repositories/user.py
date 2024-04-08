@@ -42,6 +42,12 @@ class UserRepository:
         lectures = exec.scalars()
         return lectures
 
+    async def get_leture_by_id(self, id: int, db: AsyncSession):
+        q = select(Lecture).where(Lecture.id == id)
+        exec = await db.execute(q)
+        lecture = exec.scalar()
+        return lecture
+
     async def get_test(self, db: AsyncSession):
         q = select(Test).options(selectinload(Test.questions).selectinload(Question.variant_answers))
         exec = await db.execute(q)

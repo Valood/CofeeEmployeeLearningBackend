@@ -56,9 +56,14 @@ async def create_lecture(
 
 
 @router.get("/lectures", response_model=List[CreatedLecture])
-async def create_lecture(
+async def get_all_lectures(
         db: AsyncSession = Depends(get_db)):
     lecture = await repository.get_all_lectures(db)
+    return lecture
+
+@router.get("/lectures/{lecture_id}", response_model=CreatedLecture)
+async def get_lecture(lecture_id: int, db: AsyncSession = Depends(get_db)):
+    lecture = repository.get_leture_by_id(lecture_id, db)
     return lecture
 
 
