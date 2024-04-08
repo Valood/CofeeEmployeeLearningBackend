@@ -3,16 +3,18 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import schemas
 
-from schemas.user import UserAuthData, UserAuthReturn, UserData
+from schemas.user import *
 from services.database import get_db
 from services.user import UserService
 from auth.utils import *
+from repositories.user import *
 
 router = APIRouter(tags=["client"])
 
 auth_service = UserService()
 
 http_bearer = HTTPBearer()
+repository = UserRepository()
 
 @router.post("/auth/register", response_model=UserAuthReturn)
 async def register_client_user(user: UserAuthData, db: AsyncSession = Depends(get_db)) -> UserAuthReturn:
@@ -43,3 +45,9 @@ async def get_authorised_user_information(
     return await auth_service.get_user_by_id(user_id, db)
 
 
+@router.post("/lectures", response_model=CreatedLecture)
+async def create_lecture(
+        lecture: CreateLecture,
+        db: AsyncSession = Depends(get_db)):
+    lecture = await repository.create_lecture(lecture.title, lecture.content, db)
+    return lecture

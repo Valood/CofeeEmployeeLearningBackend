@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from models.user import User as UserModel
+from models.user import Lecture
 from models.user import UserRole
 
 
@@ -24,3 +25,10 @@ class UserRepository:
         exec = await db.execute(q)
         user = exec.scalar()
         return user
+
+    async def create_lecture(self, title: str, content: str,  db: AsyncSession):
+        lecture = Lecture(title=title, content=content)
+        db.add(lecture)
+        await db.commit()
+        await db.refresh(lecture)
+        return lecture

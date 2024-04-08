@@ -13,6 +13,11 @@ class UserAuthData(BaseModel):
     email: EmailStr
     password: str
 
+class RegisterUserSchema(BaseModel):
+    email: EmailStr
+    password: str
+    role: str
+
 class UserData(BaseModel):
     email: EmailStr
     role: str
@@ -27,3 +32,13 @@ class NewUserReturn(BaseModel):
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
+
+
+class CreatedLecture(BaseModel):
+    id: int
+    title: str
+    content: str
+
+class CreateLecture(BaseModel):
+    title: str
+    content: str
