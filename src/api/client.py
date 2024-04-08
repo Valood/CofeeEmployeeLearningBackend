@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -50,4 +52,11 @@ async def create_lecture(
         lecture: CreateLecture,
         db: AsyncSession = Depends(get_db)):
     lecture = await repository.create_lecture(lecture.title, lecture.content, db)
+    return lecture
+
+
+@router.get("/lectures", response_model=List[CreatedLecture])
+async def create_lecture(
+        db: AsyncSession = Depends(get_db)):
+    lecture = await repository.get_all_lectures(db)
     return lecture

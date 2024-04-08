@@ -32,3 +32,9 @@ class UserRepository:
         await db.commit()
         await db.refresh(lecture)
         return lecture
+
+    async def get_all_lectures(self, db: AsyncSession):
+        q = select(Lecture)
+        exec = await db.execute(q)
+        lectures = exec.scalars()
+        return lectures
