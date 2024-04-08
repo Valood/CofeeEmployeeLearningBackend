@@ -19,7 +19,7 @@ http_bearer = HTTPBearer()
 repository = UserRepository()
 
 @router.post("/auth/register", response_model=UserAuthReturn)
-async def register_client_user(user: UserAuthData, db: AsyncSession = Depends(get_db)) -> UserAuthReturn:
+async def register_client_user(user: UserRegister, db: AsyncSession = Depends(get_db)) -> UserAuthReturn:
     """
     Регистрация клиента
     """
@@ -83,7 +83,27 @@ async def get_test(db: AsyncSession = Depends(get_db)):
         "questions": questions
     }
 
-@router.get("/test/check")
-async def check_test(db: AsyncSession = Depends(get_db)):
-    pass
+@router.post("/test/check")
+async def check_test(answers: AnswersSchema, db: AsyncSession = Depends(get_db),  payload: dict = Depends(get_current_token_payload)):
+    count = 0
+    role = payload.get("role")
+    for answer in answers.answers:
+
+        variant_object = await repository.get_variant_answer_by_id(answer, db)
+        if variant_object.is_true:
+            count += 1
+
+    if count == len(answers.answers):
+        new_role = await repository.up_rank_of_user(payload.get("id"), payload.get("role"), db)
+        return {
+            "passed": True,
+            "count": count,
+            "new_role": new_role
+        }
+    else:
+        return {
+            "passed": False,
+            "count": count
+        }
+
 

@@ -2,14 +2,14 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from repositories.user import UserRepository
-from schemas.user import UserAuthReturn, UserAuthData, UserData, RegisterUserSchema
+from schemas.user import UserAuthReturn, UserAuthData, UserData, RegisterUserSchema, UserRegister
 from auth.utils import *
 
 class UserService:
     def __init__(self):
         self.repository = UserRepository()
 
-    async def register_user(self, user: UserAuthData, db: AsyncSession) -> UserAuthReturn:
+    async def register_user(self, user: UserRegister, db: AsyncSession) -> UserAuthReturn:
         # Проверка наличия пользователя с таким email
         has_user = await self.repository.get_user_by_email_or_none(user.email, db)
         if has_user:

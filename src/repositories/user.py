@@ -10,8 +10,8 @@ from models.user import UserRole
 
 class UserRepository:
 
-    async def create_user(self, email: str, password: bytes, db: AsyncSession, role: str = UserRole.INTERN) -> UserModel:
-        user = UserModel(email=email, password=password, role=role)
+    async def create_user(self, email: str, password: bytes, name: str, city: str,  db: AsyncSession, role: str = UserRole.INTERN) -> UserModel:
+        user = UserModel(email=email, password=password, name=name, city=city, role=role)
         db.add(user)
         await db.commit()
         await db.refresh(user)
@@ -53,5 +53,32 @@ class UserRepository:
         questions = exec.scalars()
         return questions
 
-    async def update_user_role(self, user_id: int, db: AsyncSession):
-        pass
+    async def get_variant_answer_by_id(self, variant_id: int, db: AsyncSession):
+        q = select(VariantAnswer).where(VariantAnswer.id == variant_id)
+        exec = await db.execute(q)
+        variant = exec.scalar()
+        return variant
+
+    async def up_rank_of_user(self, id: int,  role: str,  db: AsyncSession):
+
+        match role:
+            case UserRole.ADMIN:
+                new_role = UserRole.HR
+
+            case UserRole.BARISTA:
+                new_role = UserRole.MANAGER
+
+            case UserRole.MANAGER:
+                new_role = UserRole.ADMIN
+
+            case UserRole.INTERN:
+                new_role = UserRole.BARISTA
+
+
+        q = select(UserModel).where(UserModel.id == id)
+        exec = await db.execute(q)
+        user = exec.scalar()
+        user.role = new_role
+        await db.commit()
+        await db.refresh(user)
+        return new_role

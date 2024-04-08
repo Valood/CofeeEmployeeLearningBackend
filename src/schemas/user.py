@@ -15,6 +15,13 @@ class UserAuthData(BaseModel):
     email: EmailStr
     password: str
 
+
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+    city: str
+    name: str
+
 class RegisterUserSchema(BaseModel):
     email: EmailStr
     password: str
@@ -22,7 +29,9 @@ class RegisterUserSchema(BaseModel):
 
 class UserData(BaseModel):
     email: EmailStr
-    role: str
+    role: str | None
+    city: str | None
+    name: str | None
     id: int
 
 class NewUserReturn(BaseModel):
@@ -44,6 +53,9 @@ class CreatedLecture(BaseModel):
 class CreateLecture(BaseModel):
     title: str
     content: str
+
+class AnswersSchema(BaseModel):
+    answers: list[int]
 
 # class VariantAnswer(BaseModel):
 
