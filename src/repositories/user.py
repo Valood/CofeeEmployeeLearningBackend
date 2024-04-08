@@ -52,3 +52,6 @@ class UserRepository:
         exec = await db.execute(q)
         questions = exec.scalars()
         return questions
+
+    async def update_user_role(self, user_id: int, db: AsyncSession):
+
