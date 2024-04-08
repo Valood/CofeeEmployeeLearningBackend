@@ -82,3 +82,8 @@ async def get_test(db: AsyncSession = Depends(get_db)):
         "title": test.title,
         "questions": questions
     }
+
+@router.get("/test/check")
+async def check_test(db: AsyncSession = Depends(get_db)):
+    pass
+
