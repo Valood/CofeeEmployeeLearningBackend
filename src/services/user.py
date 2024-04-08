@@ -18,7 +18,7 @@ class UserService:
                 detail="User with current email is already registered"
             )
         hashed_password = hash_password(user.password)
-        user = await self.repository.create_user(user.email, hashed_password, db)
+        user = await self.repository.create_user(user.email, hashed_password, user.name, user.city, db)
 
         token = encode_jwt({'id': user.id, "role": user.role})
 
