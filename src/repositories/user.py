@@ -1,5 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
+
 from models.user import User as UserModel
 
 from models.user import *
@@ -41,13 +43,9 @@ class UserRepository:
         return lectures
 
     async def get_test(self, db: AsyncSession):
-        q = select(Test)
-        print(q)
+        q = select(Test).options(selectinload(Test.questions).selectinload(Question.variant_answers))
         exec = await db.execute(q)
         test = exec.scalars().first()
-
-        await db.refresh(test)
-        await test.questions.load()
         return test
     async def get_questions(self, db: AsyncSession):
         q = select(Question)

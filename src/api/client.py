@@ -66,7 +66,6 @@ async def create_lecture(
 async def get_test(db: AsyncSession = Depends(get_db)):
     test = await repository.get_test(db)
     print(test.title)
-    await db.refresh(test)
     questions = []
     for question in test.questions:
         variants = []
